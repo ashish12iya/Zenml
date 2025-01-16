@@ -3,4 +3,4 @@ pandas
 zenml
 zenml[server]
 scikit-learn
-
+kagglehub
