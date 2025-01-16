@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#zenmlfile 
+.zen
+.zen/
+
 # C extensions
 *.so
 
