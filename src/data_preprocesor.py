@@ -1,23 +1,24 @@
-from logging import getLogger
+from zenml.logger import get_logger 
+import logging
 import numpy as np 
 import pandas as pd 
 from abc import ABC, abstractmethod 
 from typing import List
 from sklearn.model_selection import train_test_split 
 
+logger = get_logger(__name__)
+logger.setLevel(logging.INFO)
 
-logger = getLogger(__name__)
-logger.setLevel(logger)
 class ProcessStrategy(ABC): 
     """
     this calss is the base blue-print for the preprocessing the data 
     """
     @abstractmethod
-    def process_data()->pd.DataFrame: 
+    def process_data(self)->pd.DataFrame: 
         pass 
 
 
-class DataClearner(ProcessStrategy): 
+class DataCleaning(ProcessStrategy): 
     """
     this will clean the data from 
     """
@@ -47,7 +48,7 @@ class SplitData(ProcessStrategy):
 
     def __init__(self, DataFrame: pd.DataFrame, **kwargs):
         self.dataframe = DataFrame
-        self.swargs = kwargs
+        self.kwargs = kwargs
 
     def process_data(self)->pd.DataFrame | pd.Series : 
         """
@@ -57,8 +58,23 @@ class SplitData(ProcessStrategy):
             X =self.dataframe.iloc[:, :-1] 
             y = self.dataframe.iloc[:,-1] 
 
-            X_train, y_train, X_test, y_test =train_test_split(X,y) 
+            X_train, X_test, y_train, y_test =train_test_split(X,y,**self.kwargs)
+
+            return X_train, X_test, y_train, y_test 
         
         except Exception as e:
-            logger.info('wht')
+            logger.error(f"error during the splitting the dataset in train and test : ") 
             raise e
+
+class DataPreProcessor: 
+    """this is the class which process the every data stratergy"""
+
+    def __init__(self, data_stratergy: ProcessStrategy):
+        self.data_strategy  = data_stratergy 
+
+    def process_data(self): 
+        try : 
+            return self.data_strategy.process_data() 
+        
+        except Exception as e: 
+            raise e 
