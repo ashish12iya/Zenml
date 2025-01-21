@@ -13,11 +13,9 @@ logger = get_logger(__name__)
 logger.setLevel(logging.INFO) 
 
 @pipeline(enable_cache=False) 
-def devlopment_pipe(path: str): 
+def training_pipeline(path: str): 
     df = ingest_data(path)
     X_train, y_train, X_test, y_test = process_data(df) 
     model = train_model(X_train, y_train) 
     acc, loss = evaluate_model(X_test, y_test, model)
-    
-
     
