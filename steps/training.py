@@ -4,11 +4,11 @@ import numpy as np
 from typing_extensions import Annotated 
 from sklearn.base import ClassifierMixin 
 from src.model_train import Trainer, LogisticRegressionModel
-from Materializer.cs_materializer import SkLearn
 from zenml import step 
+from Materializer.cs_materializer import TrainingMaterialize
 
 
-@step(enable_cache=False, output_materializers=SkLearn)
+@step(enable_cache=False, output_materializers=TrainingMaterialize)
 def train_model(X_train: pd.DataFrame, y_train: pd.Series)->Annotated[ClassifierMixin, "Trained Model"]:
     """"
     this step is for the training the model: 

@@ -1,4 +1,4 @@
-from typing import Tuple 
+from typing import Tuple, Any
 import numpy as np 
 import pandas as pd 
 from typing_extensions import Annotated 
@@ -6,18 +6,17 @@ from zenml import step
 from sklearn.base import ClassifierMixin 
 from zenml.logger import get_logger 
 from src.model_validate import Evaluator, RMSE, ACC
-from Materializer.cs_materializer import SkLearn
 import logging
 
 logger = get_logger(__name__) 
 logger.setLevel(logging.INFO) 
 
-@step(enable_cache=False, output_materializers=SkLearn)
-def evaluate_model(X_test: pd.DataFrame, y_test: pd.Series, trained_model: ClassifierMixin)->Tuple[
+@step(enable_cache=False)
+def evaluate_model(X_test: pd.DataFrame, y_test: pd.Series, trained_model: ClassifierMixin) -> Tuple[
     Annotated[float, "Accuray"], 
-    Annotated[float, "Loss"], 
+    Annotated[float, "Loss"]
 ]: 
-    try: 
+    try:    
         y_pred = trained_model.predict(X_test)
         
         rmse_score = RMSE()
@@ -33,4 +32,5 @@ def evaluate_model(X_test: pd.DataFrame, y_test: pd.Series, trained_model: Class
         return acc, rmse 
     
     except Exception as e:
-        raise e 
+        logger.error(f"Error in evaluate_model: {str(e)}")
+        raise 
