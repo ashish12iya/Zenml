@@ -6,15 +6,15 @@ from sklearn.base import ClassifierMixin
 from src.model_train import Trainer, LogisticRegressionModel
 from zenml import step 
 from Materializer.cs_materializer import TrainingMaterialize
-from zenml.integrations.mlflow.experiment_trackers import MLFlowExperimentTracker
 from zenml.client import Client
 import mlflow 
-from config.ModelTrain_config import ModelConfiguration
-current_experiment_tracker = Client().activate_stack.experiment_tracker 
+from config.configuration import ModelConfiguration
+from zenml.client import Client
 
+running_experiment_tracker = Client().active_stack.experiment_tracker
 
-@step(enable_cache=False, output_materializers=TrainingMaterialize, experiment_tracker=current_experiment_tracker.name)
-def train_model(X_train: pd.DataFrame, y_train: pd.Series, config: ModelConfiguration )->Annotated[ClassifierMixin, "Trained Model"]:
+@step(enable_cache=False, output_materializers=TrainingMaterialize, experiment_tracker=running_experiment_tracker.name)
+def train_model(X_train: pd.DataFrame, y_train: pd.Series, config: ModelConfiguration)->Annotated[ClassifierMixin, "Trained Model"]:
     """"
     this step is for the training the model: 
 

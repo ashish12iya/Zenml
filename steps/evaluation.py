@@ -1,5 +1,4 @@
-from typing import Tuple, Any
-import numpy as np 
+from typing import Tuple
 import pandas as pd 
 from typing_extensions import Annotated 
 from zenml import step 
@@ -10,12 +9,12 @@ import logging
 import mlflow 
 from zenml.client import Client
 
-current_experiment_tracker = Client().activate_stack.experiment_tracker
+running_experiment_tracker = Client().active_stack.experiment_tracker 
 
 logger = get_logger(__name__) 
 logger.setLevel(logging.INFO) 
 
-@step(enable_cache=False, experiment_tracker=current_experiment_tracker.name)
+@step(enable_cache=False, experiment_tracker=running_experiment_tracker.name)
 def evaluate_model(X_test: pd.DataFrame, y_test: pd.Series, trained_model: ClassifierMixin) -> Tuple[
     Annotated[float, "Accuray"], 
     Annotated[float, "Loss"]
