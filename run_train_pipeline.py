@@ -5,4 +5,4 @@ if __name__ == "__main__":
 
     url = Client().active_stack.experiment_tracker.get_tracking_uri()
     print(url) 
-    training_pipeline("/home/wot-ashish/code-Ashish/Zenml_Learning/data/Stroke_Prediction_Indians.csv")
+    training_pipeline("data/Stroke_Prediction_Indians.csv")
