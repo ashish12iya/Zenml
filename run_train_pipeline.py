@@ -1,8 +1,4 @@
-from pipelines.training_pipeline import training_pipeline
-from zenml.client import Client 
+from pipelines.training_pipeline import training_pipeline 
 
-if __name__ == "__main__":
-
-    url = Client().active_stack.experiment_tracker.get_tracking_uri()
-    print(url) 
-    training_pipeline("data/Stroke_Prediction_Indians.csv")
+if __name__ == "__main__": 
+    training_pipeline() 

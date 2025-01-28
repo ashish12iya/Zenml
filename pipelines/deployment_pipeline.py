@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from zenml import pipeline 
 from typing_extensions import Annotated 
-from typing import Tuple 
+from typing import Tuple, cast
 import logging 
 
 from zenml.integrations.mlflow.model_deployers.mlflow_model_deployer import MLFlowModelDeployer 
@@ -62,8 +62,7 @@ def deployed_service_loader(
     existing_services = mlflow_model_deployer.find_model_server(
         pipeline_name=pipeline_name,
         pipeline_step_name= pipeline_step_name, 
-        model_name=model_name, 
-        running=running 
+        model_name=model_name
     )
 
 
@@ -73,9 +72,7 @@ def deployed_service_loader(
                             f"and it does't having step : {pipeline_step_name}",
                             f"please Deploy pieline first")
     
-    print(existing_services) 
-    print(type(existing_services))
-    return existing_services[0] #this will return the first service ( first referes to the currently running service) 
+    return cast(MLFlowDeploymentService, existing_services[0]) #this will return the first service ( first referes to the currently running service) 
     
 
 @pipeline(enable_cache=False, settings={"docker": docker_setting}) 
@@ -108,7 +105,6 @@ def continuous_deployment_pipelines(
         timeout = time_out, 
     )
 
-
 @step(enable_cache=False) 
 def daynamic_data_importer()->pd.DataFrame: 
     """this will import the data for making prediction
@@ -119,7 +115,6 @@ def daynamic_data_importer()->pd.DataFrame:
     data = test_data_ingest()
     return data 
     
-
 
 @step(enable_cache=False)
 def predictor(

@@ -10,5 +10,4 @@ class DeploymentDecisionConfiguraion(BaseModel):
     """this is the base configuration for the deployment decision"""
     min_accuracy: float=0.8
 
-DEFAULT_DATA_PATH="/home/wot-ashish/code-Ashish/Zenml_Learning/data/Stroke_Prediction_Indians.csv"
-DEFAULT_MODEL_PATH_MAC="/Users/apple/Ashish/Zenml/data/Stroke_Prediction_Indians.csv" 
+DEFAULT_DATA_PATH="data/Stroke_Prediction_Indians.csv"
