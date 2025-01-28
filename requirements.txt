@@ -3,5 +3,6 @@ pandas
 pyarrow
 zenml
 zenml[server]
+mlflow
 scikit-learn
 kagglehub
