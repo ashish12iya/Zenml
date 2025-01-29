@@ -38,8 +38,6 @@ class LogisticRegressionModel(Model) :
     def train_model(self, X_train: np.ndarray, y_train: np.ndarray)->ClassifierMixin: 
 
         try: 
-            logger.info(f"{self.kwargs}") 
-            print()
             lr_model = LogisticRegression(**self.kwargs)
             lr_model.fit(X_train, y_train) 
             logger.info("Your model is ready for the prediction")
