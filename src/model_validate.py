@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import numpy as np 
-from sklearn.metrics import root_mean_squared_error, mean_absolute_error, mean_squared_error, accuracy_score
+from sklearn.metrics import root_mean_squared_error, accuracy_score
 import pandas as pd 
 import logging
 from zenml.logger import get_logger 
@@ -47,9 +47,9 @@ class ACC(ValidationStrategy):
     
     def evaluate(self, y_test, y_pred)-> float: 
         try : 
-            rmse = accuracy_score(y_true=y_test, y_pred=y_pred) 
-            logger.info(f"ACC Score is : {rmse}") 
-            return rmse 
+            acc = accuracy_score(y_true=y_test, y_pred=y_pred) 
+            logger.info(f"ACC Score is : {acc}") 
+            return acc 
         
         except Exception as e: 
             logger.info(f"error during the calculating the ACC Score {e}") 
