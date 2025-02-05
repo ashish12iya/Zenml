@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  zenml:
+    image: zenmldocker/zenml-server:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - ZENML_STORE_URL=sqlite:///zenml-store/zenml.db
+      - ZENML_DEFAULT_PROJECT_NAME=default
+      - ZENML_SERVER_USERNAME=default
+      - ZENML_SERVER_PASSWORD=supersafe
+    volumes:
+      - zenml-store:/zenml-store
+      - ./.zen:/app/.zen
+
+volumes:
+  zenml-store:
