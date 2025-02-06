@@ -1,18 +1,56 @@
 version: '3'
 
 services:
-  zenml:
+  zenml-server:
     image: zenmldocker/zenml-server:latest
+    container_name: "zenml_server"
     ports:
       - "8080:8080"
     environment:
       - ZENML_STORE_URL=sqlite:///zenml-store/zenml.db
-      - ZENML_DEFAULT_PROJECT_NAME=default
-      - ZENML_SERVER_USERNAME=default
-      - ZENML_SERVER_PASSWORD=supersafe
+
     volumes:
-      - zenml-store:/zenml-store
+      - /zenml-store:/zenml-store
       - ./.zen:/app/.zen
+    
+    networks:
+      - zenml-netowrk
+
+  zenml-client: 
+    
+    image: zenmldocker/zenml:latest 
+    
+    container_name: "zenml_client"
+
+    depends_on: 
+      - zenml-server
+    
+    working_dir: /app 
+
+    environment: 
+      - ZENML_SERVER_URL=http://0.0.0.0:8080
+      - ZENML_STORE_URL=sqlite:///zenml-store/zenml.db 
+
+    command: > 
+      /bin/bash -c "
+      pip install -r requirements.txt &&
+      zenml integration install mlflow -y && 
+      zenml experiment-tracker register mlflow_experiment_tracker --flavor=mlflow && 
+      zenml model-deployer register mlflow_model_deployer --flavor=mlflow && 
+      zenml stack register mlflow_stack -o default -a default -e mlflow_experiment_tracker -d mlflow_model_deployer && 
+      zenml stack set mlflow_stack && 
+      python run_deployment_pipeline.py"
+    
+    volumes: 
+      - /zenml-client:/zenml_client
+      - .:/app
+    
+    networks:
+      - zenml-netowrk
 
 volumes:
-  zenml-store:
+  zenml-store: 
+
+networks:
+ zenml-netowrk: 
+  driver: bridge
