@@ -9,13 +9,13 @@ services:
     container_name: "mysql_server"
 
     environment:
-      - MYSQL_ROOT_PASSWORD=12iya  
+      - MYSQL_ROOT_PASSWORD=password  
     
     networks:
       - zenml_network
 
     ports:
-      - 3306:3306
+      - 8000:8000
 
 
   zenml-server: 
@@ -25,7 +25,7 @@ services:
     container_name: "zenml_server"
 
     environment:
-      - ZENML_SERVER_URL=mysql://root:12iya@host.docker.internal/zenml
+      - ZENML_SERVER_URL=mysql://root:password@host.docker.internal/zenml
     
     ports:
       - 8080:8080

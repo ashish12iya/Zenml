@@ -30,7 +30,7 @@
 
 4. **Run the Setup Script**
    ```bash
-   sudo bash setup.sh
+   sudo bash zenml_setup.sh
    ```
    This script will:
    - Initialize ZenML
