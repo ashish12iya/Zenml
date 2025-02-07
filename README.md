@@ -16,7 +16,7 @@
 
 2. **Start Docker Services**
    ```bash
-   docker-compose up -d
+   docker-compose up 
    ```
    After starting Docker services, the MLflow UI will be available at:
    - http://localhost:8080
@@ -31,7 +31,6 @@
 4. **Run the Setup Script**
    ```bash
    sudo bash setup.sh
-   ./setup.sh
    ```
    This script will:
    - Initialize ZenML
