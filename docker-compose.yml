@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+
+  sql-server:
+
+    image: mysql:8.0
+
+    container_name: "mysql_server"
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=password  
+    
+    networks:
+      - zenml_network
+
+    ports:
+      - 8000:8000
+
+
+  zenml-server: 
+    
+    image: zenmldocker/zenml-server:latest 
+    
+    container_name: "zenml_server"
+
+    environment:
+      - ZENML_SERVER_URL=mysql://root:password@host.docker.internal/zenml
+    
+    ports:
+      - 8080:8080
+
+    extra_hosts: 
+      - "host.docker.internal:host-gateway"
+    
+    networks:
+      - zenml_network
+    
+    links: 
+      - sql-server
+
+    depends_on:
+      - sql-server
+
+networks:
+  zenml_network: 
+    driver: bridge
