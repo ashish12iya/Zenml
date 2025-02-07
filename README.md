@@ -16,7 +16,7 @@
 
 2. **Start Docker Services**
    ```bash
-   docker-compose up 
+   docker compose up 
    ```
    After starting Docker services, the MLflow UI will be available at:
    - http://localhost:8080
@@ -41,6 +41,7 @@
 
     zenml stack list 
     zenml stack set mlflow_stack
+    zenml stack list 
     zenml stack describe  
     ```
    This script will:
