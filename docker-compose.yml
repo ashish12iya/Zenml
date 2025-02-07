@@ -1,56 +1,47 @@
-version: '3'
+version: '3.9'
 
 services:
-  zenml-server:
-    image: zenmldocker/zenml-server:latest
-    container_name: "zenml_server"
-    ports:
-      - "8080:8080"
+
+  sql-server:
+
+    image: mysql:8.0
+
+    container_name: "mysql_server"
+
     environment:
-      - ZENML_STORE_URL=sqlite:///zenml-store/zenml.db
-
-    volumes:
-      - /zenml-store:/zenml-store
-      - ./.zen:/app/.zen
+      - MYSQL_ROOT_PASSWORD=12iya  
     
     networks:
-      - zenml-netowrk
+      - zenml_network
 
-  zenml-client: 
-    
-    image: zenmldocker/zenml:latest 
-    
-    container_name: "zenml_client"
+    ports:
+      - 3306:3306
 
-    depends_on: 
-      - zenml-server
-    
-    working_dir: /app 
 
-    environment: 
-      - ZENML_SERVER_URL=http://0.0.0.0:8080
-      - ZENML_STORE_URL=sqlite:///zenml-store/zenml.db 
-
-    command: > 
-      /bin/bash -c "
-      pip install -r requirements.txt &&
-      zenml integration install mlflow -y && 
-      zenml experiment-tracker register mlflow_experiment_tracker --flavor=mlflow && 
-      zenml model-deployer register mlflow_model_deployer --flavor=mlflow && 
-      zenml stack register mlflow_stack -o default -a default -e mlflow_experiment_tracker -d mlflow_model_deployer && 
-      zenml stack set mlflow_stack && 
-      python run_deployment_pipeline.py"
+  zenml-server: 
     
-    volumes: 
-      - /zenml-client:/zenml_client
-      - .:/app
+    image: zenmldocker/zenml-server:latest 
+    
+    container_name: "zenml_server"
+
+    environment:
+      - ZENML_SERVER_URL=mysql://root:12iya@host.docker.internal/zenml
+    
+    ports:
+      - 8080:8080
+
+    extra_hosts: 
+      - "host.docker.internal:host-gateway"
     
     networks:
-      - zenml-netowrk
+      - zenml_network
+    
+    links: 
+      - sql-server
 
-volumes:
-  zenml-store: 
+    depends_on:
+      - sql-server
 
 networks:
- zenml-netowrk: 
-  driver: bridge
+  zenml_network: 
+    driver: bridge
