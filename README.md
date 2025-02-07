@@ -30,19 +30,19 @@
 
 4. **Run the Setup Script**
    ```bash
-zenml experiment-tracker register mlflow_experiment_tracker --flavor=mlflow
-zenml model-deployer register mlflow_model_deployer --flavor=mlflow
-zenml stack list 
-zenml stack register mlflow_stack \
-    -o default \
-    -a default \
-    -e mlflow_experiment_tracker \
-    -d mlflow_model_deployer 
+    zenml experiment-tracker register mlflow_experiment_tracker --flavor=mlflow
+    zenml model-deployer register mlflow_model_deployer --flavor=mlflow
+    zenml stack list 
+    zenml stack register mlflow_stack \
+        -o default \
+        -a default \
+        -e mlflow_experiment_tracker \
+        -d mlflow_model_deployer 
 
-zenml stack list 
-zenml stack set mlflow_stack
-zenml stack describe  
-   ```
+    zenml stack list 
+    zenml stack set mlflow_stack
+    zenml stack describe  
+    ```
    This script will:
    - Initialize ZenML
    - Install MLflow integration
